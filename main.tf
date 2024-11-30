@@ -88,6 +88,13 @@ resource "aws_security_group" "Terraform-SG" {
   }
 
   ingress {
+    from_port   = 3306
+    to_port     = 3306
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"] # Allow MySQL traffic
+  }
+
+  ingress {
     from_port   = -1
     to_port     = -1
     protocol    = "icmp"
