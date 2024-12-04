@@ -1,4 +1,4 @@
-#Networking-------------------------------------------------------------------------------------------------------------------------------------------
+# Networking ----------------------------------------------------------------------------------------------------------------------------
 # Create VPC with IP address 10.0.0.0/16
 resource "aws_vpc" "Terraform-VPC-test" {
   cidr_block           = "10.0.0.0/16"
@@ -9,8 +9,7 @@ resource "aws_vpc" "Terraform-VPC-test" {
   }
 }
 
-
-#Subnets-------------------------------------------------------------------------------------------------------------------------------------------
+# Subnets ----------------------------------------------------------------------------------------------------------------------------
 # Create Subnet 1
 resource "aws_subnet" "subnet1" {
   vpc_id                  = aws_vpc.Terraform-VPC-test.id
@@ -21,6 +20,7 @@ resource "aws_subnet" "subnet1" {
     Name = "Terraform-subnet-1"
   }
 }
+
 # Create Subnet 2
 resource "aws_subnet" "subnet2" {
   vpc_id                  = aws_vpc.Terraform-VPC-test.id
@@ -32,7 +32,7 @@ resource "aws_subnet" "subnet2" {
   }
 }
 
-# Internet Gateway------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Internet Gateway -------------------------------------------------------------------------------------------------------------------
 resource "aws_internet_gateway" "Terraform-IGW" {
   vpc_id = aws_vpc.Terraform-VPC-test.id
 
@@ -41,7 +41,7 @@ resource "aws_internet_gateway" "Terraform-IGW" {
   }
 }
 
-# Route Table------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Route Table ------------------------------------------------------------------------------------------------------------------------
 resource "aws_route_table" "Terraform-RT" {
   vpc_id = aws_vpc.Terraform-VPC-test.id
 
@@ -50,136 +50,25 @@ resource "aws_route_table" "Terraform-RT" {
   }
 }
 
-
-# Route for Internet Access------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Route for Internet Access
 resource "aws_route" "InternetAccess" {
   route_table_id         = aws_route_table.Terraform-RT.id
   destination_cidr_block = "0.0.0.0/0"
   gateway_id             = aws_internet_gateway.Terraform-IGW.id
 }
 
-
-
-# Associate Route Table with Subnet 1----------------------------------------------------------------------------------------------------------------
+# Associate Route Table with Subnet 1
 resource "aws_route_table_association" "Subnet1Association" {
   subnet_id      = aws_subnet.subnet1.id
   route_table_id = aws_route_table.Terraform-RT.id
 }
 
-
-
-#Security Group------------------------------------------------------------------------------------------------------------------------------------
-# Update EC2 Instance Security Group
-resource "aws_security_group" "Terraform-SG" {
-  vpc_id = aws_vpc.Terraform-VPC-test.id
-
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"] # Allow HTTP traffic
-  }
-
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"] # Allow SSH traffic
-  }
-
-  ingress {
-    from_port   = 3306
-    to_port     = 3306
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"] # Allow MySQL traffic
-  }
-
-  ingress {
-    from_port   = -1
-    to_port     = -1
-    protocol    = "icmp"
-    cidr_blocks = ["0.0.0.0/0"] # Allow ping (ICMP) traffic
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"] # Allow all outbound traffic
-  }
-
-  tags = {
-    Name = "Terraform-SG"
-  }
-}
-
-
-# Create a new SSH Key Pair for EC2 instances
+# SSH Key Pair for EC2 instances---------------------------------------------------------------------------------------------------------------------------------------------------
 resource "aws_key_pair" "terraform_key" {
-  key_name   = "terraform-key"                      # Name for the new key pair
-  public_key = file("~/.ssh/id_rsa.pub")            # Path to the public key file on my pc
+  key_name   = "terraform-key"
+  public_key = file("~/.ssh/id_rsa.pub") # Path to the public key file on your system
 
   tags = {
     Name = "Terraform-Key"
-  }
-}
-
-
-#VMs---------------------------------------------------------------------------------------------------------------------------------------
-#Apache2 webserver
-resource "aws_instance" "Terraform-Apache" {
-  ami           = "ami-0d64bb532e0502c46"                   #Ubuntu AMI(image) for Ireland
-  instance_type = "t2.micro"                                #From the Free tier
-  subnet_id     = aws_subnet.subnet1.id                     #Put it to a subnet 
-  key_name = aws_key_pair.terraform_key.key_name
-
-  tags = {
-    Name = "Apache-Webserver"
-  }
-  user_data = file("apache.sh")
-  vpc_security_group_ids = [aws_security_group.Terraform-SG.id]
-
-  
-   metadata_options {
-    http_endpoint = "enabled"
-    http_tokens   = "optional"
-  }
-}
-
-#API server
-resource "aws_instance" "Terraform-API" {
-  ami           = "ami-0d64bb532e0502c46"                   #Ubuntu AMI(image) for Ireland
-  instance_type = "t2.micro"                                #From the Free tier
-  subnet_id     = aws_subnet.subnet1.id
-  key_name = aws_key_pair.terraform_key.key_name
-
-  tags = {
-    Name = "API-Server"
-  }
-  user_data = file("apache.sh")
-  vpc_security_group_ids = [aws_security_group.Terraform-SG.id]
-
-   metadata_options {
-    http_endpoint = "enabled"
-    http_tokens   = "optional"
-  }
-}
-
-#MySql webserver
-resource "aws_instance" "Terraform-MySql" {
-  ami           = "ami-0d64bb532e0502c46"                   #Ubuntu AMI(image) for Ireland
-  instance_type = "t2.micro"                                #From the Free tier
-  subnet_id     = aws_subnet.subnet1.id
-  key_name = aws_key_pair.terraform_key.key_name
-
-  tags = {
-    Name = "MySql-Server"
-  }
-  user_data = file("mysql.sh")
-  vpc_security_group_ids = [aws_security_group.Terraform-SG.id]
-
-   metadata_options {
-    http_endpoint = "enabled"
-    http_tokens   = "optional"
   }
 }
