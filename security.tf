@@ -104,6 +104,7 @@ resource "aws_iam_role" "terraform_role" {
   })
 }
 
+#S3 Security Group--------------------------------------------------------------------------------------------------------------------------------
 resource "aws_iam_policy" "terraform_s3_policy" {
   name        = "TerraformS3Policy"
   description = "S3 permissions for Terraform"
@@ -134,4 +135,28 @@ resource "aws_iam_role_policy_attachment" "attach_s3_policy" {
 resource "aws_iam_instance_profile" "terraform_instance_profile" {
   name = "terraform-instance-profile"
   role = aws_iam_role.terraform_role.name
+}
+
+
+#EFS Security Group--------------------------------------------------------------------------------------------------------------------------------
+resource "aws_security_group" "terraform_efs_sg" {
+  vpc_id = aws_vpc.Terraform-VPC-test.id
+
+  ingress {
+    from_port   = 2049
+    to_port     = 2049
+    protocol    = "tcp"
+    cidr_blocks = ["10.0.0.0/16"] 
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "EFS-Security-Group"
+  }
 }

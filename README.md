@@ -19,5 +19,5 @@ For mounting instances to the EFS, yu have to connect with the instance.
 To push it on github you have to navigate to the location of your terraform project and run the following commands
     -run the command:
         git add .
-        git commit "<a random message>"
+        git commit -m "<a random message>"
         git push

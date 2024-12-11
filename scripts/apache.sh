@@ -5,6 +5,9 @@ sudo apt install apache2 -y
 sudo systemctl start apache2
 sudo systemctl enable apache2
 sudo apt install php libapache2-mod-php php-mysql -y
+sudo apt install mysql-server -y
+sudo systemctl start mysql
+sudo systemctl enable mysql
 
 sudo apt-get install -y nfs-common
 sudo mkdir /mnt/efs
@@ -38,6 +41,7 @@ echo "      if [[ \$(file \"\$file\") == *\"ASCII text\"* ]] && [[ \$(cat \"\$fi
 echo "        echo \"Decoding Base64 file: \$file\"" | sudo tee -a /home/ubuntu/s3-loop.sh
 echo "        base64 --decode \"\$file\" > \"\$file.decoded\"" | sudo tee -a /home/ubuntu/s3-loop.sh
 echo "        mv \"\$file.decoded\" \"\$file\"" | sudo tee -a /home/ubuntu/s3-loop.sh
+echo "        for filename in \$(ls -1 /var/www/html); do mysql -u remote -premote -h 10.0.1.31 -e \"USE files; INSERT INTO file (name) VALUES ('\$filename');\"; done" > /home/ubuntu/sqlInsert.sh
 echo "      fi" | sudo tee -a /home/ubuntu/s3-loop.sh
 echo "    fi" | sudo tee -a /home/ubuntu/s3-loop.sh
 echo "  done" | sudo tee -a /home/ubuntu/s3-loop.sh
@@ -50,3 +54,13 @@ sudo nohup /home/ubuntu/s3-loop.sh &
 sudo cd /home/ubuntu
 sleep 5
 sudo ./s3-loop.sh &
+
+
+#sudo mysql -h 10.0.1.31 -u remote -premote
+sleep 10
+ 
+echo "* * * * * root sudo aws s3 sync s3://r0938274-terraform-file-upload-bucket /var/www/html" >> /etc/crontab
+
+echo "for filename in \$(ls -1 /var/www/html); do mysql -u remote -premote -h 10.0.1.31 -e \"USE files; INSERT INTO file (name) VALUES ('\$filename');\"; done" > /home/ubuntu/sqlInsert.sh
+sudo chmod 755 /home/ubuntu/sqlInsert.sh
+echo "* * * * * root sudo /home/ubuntu/sqlInsert.sh" >> /etc/crontab
