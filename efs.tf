@@ -21,3 +21,6 @@ resource "aws_efs_mount_target" "subnet2_mount_target" {
   security_groups  = [aws_security_group.terraform_efs_sg.id]
 }
 
+output "efs_dns_name" {
+  value = aws_efs_file_system.terraform_efs.dns_name
+}

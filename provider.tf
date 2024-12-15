@@ -4,3 +4,7 @@ provider "aws" {
     profile = "default"             #default user
 
 }
+provider "tls" {
+    
+  
+}

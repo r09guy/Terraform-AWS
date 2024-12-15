@@ -65,9 +65,12 @@ resource "aws_lambda_permission" "allow_http_api" {
 }
 
 output "api_gateway_url" {
-  value = "value: ${aws_apigatewayv2_api.http_api.api_endpoint}/${aws_apigatewayv2_stage.production_stage.name}/upload"
+  value = "value: url -X POST -H 'filename: example.txt' -d 'Mustafa Test' ${aws_apigatewayv2_api.http_api.api_endpoint}/${aws_apigatewayv2_stage.production_stage.name}/upload"
   description = "The API Gateway URL for uploading files."
 }
 
+output "Lambda-Command" {
+  value = "url -X POST -H 'filename: example.txt' -d 'Mustafa Test'"
+}
 
 #curl -X POST -H "filename: example.txt" -d "Mustafa Test" https://8pi4zekerh.execute-api.eu-west-1.amazonaws.com/test

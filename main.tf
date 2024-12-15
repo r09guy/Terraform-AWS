@@ -5,7 +5,7 @@ resource "aws_vpc" "Terraform-VPC-test" {
   enable_dns_support   = true
   enable_dns_hostnames = true
   tags = {
-    Name = "Terraform-VPC-test"
+    Name = "Terraform-VPC"
   }
 }
 
@@ -64,11 +64,19 @@ resource "aws_route_table_association" "Subnet1Association" {
 }
 
 # SSH Key Pair for EC2 instances---------------------------------------------------------------------------------------------------------------------------------------------------
-resource "aws_key_pair" "terraform_key" {
-  key_name   = "terraform-key"
-  public_key = file("~/.ssh/id_rsa.pub") # Path to the public key file on your system
+#resource "aws_key_pair" "terraform_key" {
+#  key_name   = "terraform-key"
+#  public_key = file("C:/Users/musta/.ssh/id_rsa.pub") # Path to the public key file on your system
+#
+#  tags = {    Name = "Terraform-Key"
+#  }
+#}
+resource "tls_private_key" "Terraform-PrivateKey" {
+  algorithm = "RSA"
+  rsa_bits  = 2048
+}
 
-  tags = {
-    Name = "Terraform-Key"
-  }
+resource "aws_key_pair" "keypair" {
+  key_name = "terraform-keypair"
+  public_key = tls_private_key.Terraform-PrivateKey.public_key_openssh
 }

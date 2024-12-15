@@ -21,3 +21,5 @@ To push it on github you have to navigate to the location of your terraform proj
         git add .
         git commit -m "<a random message>"
         git push
+
+that all should work
