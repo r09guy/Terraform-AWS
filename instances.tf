@@ -20,18 +20,61 @@ resource "aws_instance" "Terraform-Apache" {
   }
 }
 
-# API Server
-resource "aws_instance" "Terraform-API" {
+# Ansible Server 
+resource "aws_instance" "Terraform-AnsibleServer" {
   ami           = "ami-0d64bb532e0502c46" # Ubuntu AMI (Ireland)
   instance_type = "t2.micro"               # Free tier
   subnet_id     = aws_subnet.subnet1.id
   #key_name      = aws_key_pair.terraform_key.key_name
   key_name = "terraform-keypair"
+  private_ip = "10.0.1.50"
 
   tags = {
-    Name = "API-Server"
+    Name = "Ansible-Server"
   }
-  user_data = file("scripts/ansible.sh")
+  user_data = file("scripts/aserver.sh")
+  vpc_security_group_ids = [aws_security_group.Terraform-SG.id]
+
+  metadata_options {
+    http_endpoint = "enabled"
+    http_tokens   = "optional"
+  }
+}
+
+# Ansible Client 1
+resource "aws_instance" "Terraform-AnsibleClient1" {
+  ami           = "ami-0d64bb532e0502c46" # Ubuntu AMI (Ireland)
+  instance_type = "t2.micro"               # Free tier
+  subnet_id     = aws_subnet.subnet1.id
+  #key_name      = aws_key_pair.terraform_key.key_name
+  key_name = "terraform-keypair"
+  private_ip = "10.0.1.51"
+
+  tags = {
+    Name = "Ansible-Client-1"
+  }
+  user_data = file("scripts/aclient.sh")
+  vpc_security_group_ids = [aws_security_group.Terraform-SG.id]
+
+  metadata_options {
+    http_endpoint = "enabled"
+    http_tokens   = "optional"
+  }
+}
+
+# Ansible Client 2
+resource "aws_instance" "Terraform-AnsibleClient2" {
+  ami           = "ami-0d64bb532e0502c46" # Ubuntu AMI (Ireland)
+  instance_type = "t2.micro"               # Free tier
+  subnet_id     = aws_subnet.subnet1.id
+  #key_name      = aws_key_pair.terraform_key.key_name
+  key_name = "terraform-keypair"
+  private_ip = "10.0.1.52"
+
+  tags = {
+    Name = "Ansible-Client-2"
+  }
+  user_data = file("scripts/aclient.sh")
   vpc_security_group_ids = [aws_security_group.Terraform-SG.id]
 
   metadata_options {
