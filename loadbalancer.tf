@@ -1,3 +1,4 @@
+#Making an Application Load Balancer
 # Create ALB
 resource "aws_lb" "LoadBalancer" {
     name               = "Terraform-Webserver-ALB"
@@ -47,3 +48,5 @@ resource "aws_lb_target_group_attachment" "LoadBalancerGroupAttachment" {
 output "LoadBalancer_IP" {
     value = aws_lb.LoadBalancer.dns_name
 }
+
+#Mustafa Karabayir

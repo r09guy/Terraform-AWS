@@ -1,3 +1,5 @@
+#Making EC2 Instances 
+
 # Apache2 Webserver
 resource "aws_instance" "Terraform-Apache" {
   count = 2
@@ -193,3 +195,4 @@ output "sql" {
 }
 
 
+#Mustafa Karabayir

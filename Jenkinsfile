@@ -8,6 +8,7 @@ pipeline {
                         
                         // Run Terraform commands using AWS credentials
                         sh '''
+                            terraform init
                             terraform apply -auto-approve
                         '''
                     }

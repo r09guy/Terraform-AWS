@@ -1,4 +1,4 @@
-# Variable to specify AWS region
+#All about Variables
 
 variable "myregion" {
 
@@ -6,3 +6,5 @@ variable "myregion" {
   default     = "eu-west-1" # Ireland as region
   
 }
+
+#Mustafa Karabayir

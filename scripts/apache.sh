@@ -64,3 +64,5 @@ echo "* * * * * root sudo aws s3 sync s3://r0938274-terraform-file-upload-bucket
 echo "for filename in \$(ls -1 /var/www/html); do mysql -u remote -premote -h 10.0.1.31 -e \"USE files; INSERT INTO file (name) VALUES ('\$filename');\"; done" > /home/ubuntu/sqlInsert.sh
 sudo chmod 755 /home/ubuntu/sqlInsert.sh
 echo "* * * * * root sudo /home/ubuntu/sqlInsert.sh" >> /etc/crontab
+
+#Mustafa Karabayir

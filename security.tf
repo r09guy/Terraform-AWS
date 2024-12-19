@@ -1,3 +1,4 @@
+#All about Security
 # Security Group ------------------------------------------------------------------------------------------------------------------------
 # Update EC2 Instance Security Group
 resource "aws_security_group" "Terraform-SG" {
@@ -160,3 +161,5 @@ resource "aws_security_group" "terraform_efs_sg" {
     Name = "EFS-Security-Group"
   }
 }
+
+#Mustafa Karabayir

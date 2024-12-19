@@ -1,4 +1,5 @@
-# Lambda Function Definition (existing)
+#Lambda Function
+# Lambda Function Definition
 resource "aws_lambda_function" "upload_file_lambda" {
   function_name    = "uploadFileToS3"
   role             = aws_iam_role.lambda_role.arn
@@ -74,3 +75,4 @@ output "Lambda-Command" {
 }
 
 #curl -X POST -H "filename: example.txt" -d "Mustafa Test" https://8pi4zekerh.execute-api.eu-west-1.amazonaws.com/test
+#Mustafa Karabayir

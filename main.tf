@@ -1,4 +1,4 @@
-# Networking ----------------------------------------------------------------------------------------------------------------------------
+# Making everything about Networking -------------------------------------------------------------------------------------------
 # Create VPC with IP address 10.0.0.0/16
 resource "aws_vpc" "Terraform-VPC-test" {
   cidr_block           = "10.0.0.0/16"
@@ -80,3 +80,5 @@ resource "aws_key_pair" "keypair" {
   key_name = "terraform-keypair"
   public_key = tls_private_key.Terraform-PrivateKey.public_key_openssh
 }
+
+#Mustafa Karabayir

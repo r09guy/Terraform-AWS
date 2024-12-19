@@ -1,3 +1,5 @@
+#Getting Providers
+
 provider "aws" {
 
     region = var.myregion
@@ -8,3 +10,5 @@ provider "tls" {
     
   
 }
+
+#Mustafa Karabayir

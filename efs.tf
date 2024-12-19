@@ -1,4 +1,4 @@
-# Declare the AWS region data source
+#Making an AWS EFS
 data "aws_region" "current" {}
 
 resource "aws_efs_file_system" "terraform_efs" {
@@ -24,3 +24,5 @@ resource "aws_efs_mount_target" "subnet2_mount_target" {
 output "efs_dns_name" {
   value = aws_efs_file_system.terraform_efs.dns_name
 }
+
+#Mustafa Karabayir

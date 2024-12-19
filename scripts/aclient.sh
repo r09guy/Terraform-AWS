@@ -14,3 +14,5 @@ echo "    sleep 10" | sudo tee -a /home/ubuntu/script.sh
 echo "done" | sudo tee -a /home/ubuntu/script.sh
 
 sudo ./home/ubuntu/script.sh &
+
+#Mustafa Karabayir

@@ -16,3 +16,6 @@ sudo mysql -u root -psecret -e "USE files; CREATE TABLE IF NOT EXISTS file (name
 
 sudo sed -i 's/^bind-address.*$/bind-address = 0.0.0.0/' /etc/mysql/mysql.conf.d/mysqld.cnf
 sudo systemctl restart mysql.service 
+
+
+#Mustafa Karabayir
